@@ -1,0 +1,55 @@
+<div class="d-flex justify-content-between">
+    <h2>Tasks</h2>
+    <form action="{% url 'search_task' %}" method="get" class="d-flex gap-2">
+
+        <input type="text" name="search" class="form-control" placeholder="Search keyword">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+</div>
+
+
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Deadline</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        
+                        
+                        {% if tasks|length == 0 %}
+                            <tr>
+                            <th></th>
+                            <td>No task found</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            </tr>   
+                        {% else %}
+                            {% for task in tasks  %}
+                                <tr>
+                                <th scope="row"> {{ forloop.counter }} </th>
+                                <td>{{ task.name }}</td>
+                                <td>{{ task.desc }}</td>
+                                <td> {{ task.deadline }} </td>
+                                <td> 
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'update_task' task.id %}" class="btn btn-warning btn-sm"> Update </a>
+                                    <a href="{% url 'delete_task' task.id %}" class="btn btn-danger btn-sm"> Delete </a>
+                                    </td>
+                                    </div>
+                                </tr>
+                                
+                            {% endfor %}
+
+                        {% endif %}
+                            
+                        
+                            
+                      
+                    </tbody>
+                  </table>

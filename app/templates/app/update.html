@@ -1,0 +1,16 @@
+{% extends 'app/base.html' %} {% block title %} Home {% endblock title %} 
+{% block content %}
+
+<!-- <div class="d-flex justify-content-center mt-5" style="width: 100vw"> -->
+<div class="row mx-5 my-5">
+  <div class="col-12">
+    <h2>Update Task</h2>
+    <form action="" method="post">
+      {% csrf_token %} {{ form}}
+      <button class="btn btn-success mt-3" type="submit">Update Task</button>
+    </form>
+  </div>
+ 
+
+  {% endblock content %}
+</div>

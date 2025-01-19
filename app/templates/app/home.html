@@ -1,0 +1,18 @@
+{% extends 'app/base.html' %} {% block title %} Home {% endblock title %} 
+{% block content %}
+
+<!-- <div class="d-flex justify-content-center mt-5" style="width: 100vw"> -->
+<div class="row mx-5 my-3 d-flex justify-content-center gap-5">
+    <h1 class="text-center">Task Manager</h1>
+    <hr>
+  <div class="col-4">
+    <h2>Add Task</h2>
+    <form action="" method="post">
+      {% csrf_token %} {{ form}}
+      <button class="btn btn-success mt-3" type="submit">Add Task</button>
+    </form>
+  </div>
+  <div class="col-6">{% include 'app/tasks.html' with tasks=tasks %}</div>
+</div>
+
+{% endblock content %}
