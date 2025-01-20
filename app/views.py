@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from . import forms
 from .models import Task
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def search_task(request):
     search_keyword = request.GET.get('search')
     
@@ -13,7 +15,7 @@ def search_task(request):
     
     
     
-
+@login_required
 def delete_task(request, pk):
     # print(pk)
     #retrieve the task to be deleted from db
@@ -22,6 +24,8 @@ def delete_task(request, pk):
     
     return redirect('home')
 
+
+@login_required
 def update_task(request, pk):
     
     
@@ -29,7 +33,7 @@ def update_task(request, pk):
         form = forms.TaskForm(request.POST)
         
         if form.is_valid():
-            form.save()
+            form.save(request=request)
         
         return redirect('home')
     
@@ -39,7 +43,7 @@ def update_task(request, pk):
     
     #fill the form with the retrived task i.e. task to be updated
     update_form = forms.TaskForm(instance=task_to_be_updated)
-    tasks = Task.objects.all().order_by('-created_at') # retrive all tasks to show
+    tasks = Task.objects.filter(user=request.user).order_by('-created_at')
     
     context = {
         'form': update_form,
@@ -50,6 +54,7 @@ def update_task(request, pk):
     return render(request, 'app/update.html', context)
 
 
+@login_required
 def home(request):
     
     #using model form - shortcut way
@@ -57,8 +62,8 @@ def home(request):
         form = forms.TaskForm(request.POST)
         
         if form.is_valid():
-            form.save()
-        
+            form.save(request=request)
+            
         return redirect('home')
     
     #using manual method
@@ -85,6 +90,7 @@ def home(request):
     search_keyword = request.session.get('search_keyword')
     if search_keyword:
         filtered_tasks = Task.objects.filter(
+                        user=request.user).filter(
                         Q(name__icontains=search_keyword) |
                         Q(desc__icontains=search_keyword) 
                 ).order_by('-created_at')
@@ -92,7 +98,7 @@ def home(request):
         del request.session['search_keyword']
         
     else:
-        tasks = Task.objects.all().order_by('-created_at')
+        tasks = Task.objects.filter(user=request.user).order_by('-created_at')
     
     context = {
         'form': form,

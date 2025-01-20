@@ -23,3 +23,12 @@ class TaskForm(forms.ModelForm):
             raise forms.ValidationError('Invalid name length')
         return name
    
+   
+    #add request.user to user field before saving 
+    def save(self, commit=True, *args, **kwargs):
+        task = super().save(commit=False)
+        request = kwargs.get('request')
+        task.user = request.user
+        if commit:
+            task.save()
+        return task

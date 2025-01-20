@@ -3,8 +3,19 @@
 
 <!-- <div class="d-flex justify-content-center mt-5" style="width: 100vw"> -->
 <div class="row mx-5 my-3 d-flex justify-content-center gap-5">
-    <h1 class="text-center">Task Manager</h1>
-    <hr>
+  <div class="d-flex justify-content-between">
+    <h2 class="text-center">
+      {% if request.user.is_authenticated %} 
+      {{ request.user.username }}
+      {% else %}
+      Guest User
+      {% endif %}</h2>
+    <form action="{% url 'logout_view' %}" method="post">
+      {% csrf_token %}
+      <button class="btn btn-danger" type="submit">Logout</button>
+    </form>
+  </div>
+  <hr />
   <div class="col-4">
     <h2>Add Task</h2>
     <form action="" method="post">
