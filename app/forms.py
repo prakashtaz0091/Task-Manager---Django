@@ -1,5 +1,11 @@
 from django import forms
-from .models import Task
+from .models import Task, Attachment
+
+
+# class AttachmentForm(forms.ModelForm):
+#     class Meta:
+#         model = Attachment
+#         fields = ['file']
 
 
 

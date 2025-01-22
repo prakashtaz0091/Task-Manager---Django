@@ -13,3 +13,14 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+    
+class Attachment(models.Model):
+    file = models.FileField(upload_to='attachments/')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="attachments")
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    
+    def __str__(self):
+        return self.file.name
+    

@@ -1,0 +1,26 @@
+{% extends 'app/base.html' %} {% load humanize %} {% block title %} Task Detail
+{% endblock title %} {% block content %}
+
+<div class="container mt-5">
+  <h2>{{task.name}}</h2>
+  <small
+    >Due date <b>{{task.deadline|naturalday|capfirst }} </b> | Assigned at :
+    {{task.created_at|naturaltime }}
+  </small>
+  <p>{{task.desc}}</p>
+
+  <hr />
+  <h3>Attachments</h3>
+
+  {% for attachment in task.attachments.all %}
+  <img
+    src="{{attachment.file.url}}"
+    alt="Not found"
+    style="width: 400px; object-fit: cover"
+  />
+  <small>{{ attachment.created_at }}</small>
+
+  {% endfor %}
+</div>
+
+{% endblock content %}

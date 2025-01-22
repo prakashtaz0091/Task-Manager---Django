@@ -5,11 +5,9 @@
 <div class="row mx-5 my-3 d-flex justify-content-center gap-5">
   <div class="d-flex justify-content-between">
     <h2 class="text-center">
-      {% if request.user.is_authenticated %} 
-      {{ request.user.username }}
-      {% else %}
-      Guest User
-      {% endif %}</h2>
+      {% if request.user.is_authenticated %} {{ request.user.username }} 
+      {% else %} Guest User {% endif %}
+    </h2>
     <form action="{% url 'logout_view' %}" method="post">
       {% csrf_token %}
       <button class="btn btn-danger" type="submit">Logout</button>
@@ -18,8 +16,11 @@
   <hr />
   <div class="col-4">
     <h2>Add Task</h2>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data" >
       {% csrf_token %} {{ form}}
+
+      <input type="file" name="files" multiple class="form-control mt-2" accept="image/*" >
+
       <button class="btn btn-success mt-3" type="submit">Add Task</button>
     </form>
   </div>

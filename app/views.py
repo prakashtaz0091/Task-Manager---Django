@@ -1,11 +1,29 @@
 from django.shortcuts import render, redirect
 from . import forms
-from .models import Task
+from .models import Task, Attachment
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 
-@login_required
+
+# @login_required
+def task_detail_view(request, pk):
+    
+    try:
+        task = Task.objects.get(id=pk)
+    except Task.DoesNotExist:
+        return redirect('home')
+    
+    context = {
+        'task': task
+    }
+    
+    
+    return render(request, "app/task_detail.html", context)
+
+
+
+# @login_required
 def search_task(request):
     search_keyword = request.GET.get('search')
     
@@ -15,7 +33,7 @@ def search_task(request):
     
     
     
-@login_required
+# @login_required
 def delete_task(request, pk):
     # print(pk)
     #retrieve the task to be deleted from db
@@ -25,7 +43,7 @@ def delete_task(request, pk):
     return redirect('home')
 
 
-@login_required
+# @login_required
 def update_task(request, pk):
     
     
@@ -54,16 +72,22 @@ def update_task(request, pk):
     return render(request, 'app/update.html', context)
 
 
-@login_required
+# @login_required
 def home(request):
     
     #using model form - shortcut way
     if request.method == "POST":
         form = forms.TaskForm(request.POST)
+        attachments = request.FILES.getlist('files')
+        # print(attachments)
         
         if form.is_valid():
-            form.save(request=request)
-            
+            task = form.save(request=request)
+        
+        for attachment in attachments:
+            Attachment.objects.create(task=task, file=attachment)
+        
+        
         return redirect('home')
     
     #using manual method
